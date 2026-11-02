@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>بطاقة المشجع الحصرية | الرادار التكتيكي والميداني</title>
+  <style>
+    :root {
+      --bg: #0A0D14;
+      --card-bg: #121824;
+      --card-inner: #1A2234;
+      --border: #1E293B;
+      --accent: #2563EB;
+      --accent-glow: rgba(37, 99, 235, 0.4);
+      --gold: #F59E0B;
+      --text: #F8FAFC;
+      --muted: #94A3B8;
+      --green: #10B981;
+      --red: #EF4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      padding-bottom: 50px;
+    }
+
+    .pass-container {
+      width: 100%;
+      max-width: 440px;
+      background: radial-gradient(circle at top, #1E293B 0%, var(--bg) 85%);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 22px 18px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.85);
+      position: relative;
+    }
+
+    /* رأس البطاقة والوسام */
+    .pass-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .badge-vip {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 800;
+    }
+
+    .fan-profile {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .crest-container {
+      width: 76px;
+      height: 76px;
+      margin: 0 auto 10px auto;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+      background: #0F172A;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 25px var(--accent-glow);
+      font-size: 2.2rem;
+    }
+
+    .fan-title {
+      font-size: 1.45rem;
+      font-weight: 900;
+      color: #FFF;
+    }
+
+    .fan-subtitle {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    /* كرت موقف السيارة الذكي */
+    .car-finder-box {
+      background: #162032;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 14px;
+      margin-bottom: 16px;
+      text-align: right;
+    }
+
+    .box-title {
+      font-size: 0.84rem;
+      font-weight: bold;
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    .car-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .btn-action {
+      flex: 1;
+      padding: 10px;
+      border-radius: 12px;
+      border: none;
+      font-weight: bold;
+      font-size: 0.75rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: 0.2s;
+    }
+
+    .btn-save-car { background: var(--accent); color: #FFF; }
+    .btn-find-car { background: #25334D; color: var(--text); border: 1px solid var(--border); }
+    .btn-action:active { transform: scale(0.96); }
+
+    /* شبكة الأدوات الرئيسية */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .tool-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .tool-card:active {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+      background: #192338;
+    }
+
+    .tool-icon { font-size: 1.5rem; margin-bottom: 6px; }
+    .tool-label { font-size: 0.8rem; font-weight: 800; color: #FFF; }
+    .tool-desc { font-size: 0.68rem; color: var(--muted); margin-top: 2px; }
+
+    /* النوافذ التفاعلية المدمجة */
+    .content-drawer {
+      display: none;
+      background: #111827;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 16px;
+      text-align: right;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding-bottom: 8px;
+    }
+
+    .drawer-header h4 { font-size: 0.95rem; color: var(--gold); }
+    .close-btn { background: none; border: none; color: var(--muted); font-size: 1.2rem; cursor: pointer; }
+
+    /* 1. ملعب الخريطة الحرارية التفاعلي */
+    .tactical-pitch {
+      position: relative;
+      width: 100%;
+      height: 220px;
+      background: #0f3d1e;
+      border: 2px solid #2f7a43;
+      border-radius: 14px;
+      margin-bottom: 14px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pitch-line-center {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 2px;
+      background: rgba(255,255,255,0.25);
+    }
+
+    .pitch-circle {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      border: 2px solid rgba(255,255,255,0.25);
+      border-radius: 50%;
+    }
+
+    /* طبقات التوهج الحراري للاعبين */
+    .heat-glow {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(15px);
+      opacity: 0.85;
+      transition: all 0.4s ease;
+      pointer-events: none;
+    }
+
+    .player-selector-bar {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 10px;
+    }
+
+    .player-chip {
+      background: var(--card-inner);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: bold;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .player-chip.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #FFF;
+    }
+
+    /* 2. مؤشرات الإحصائيات الحية */
+    .stat-row {
+      margin-bottom: 12px;
+    }
+
+    .stat-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.76rem;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .stat-bar-container {
+      width: 100%;
+      height: 8px;
+      background: #1F2937;
+      border-radius: 6px;
+      overflow: hidden;
+      display: flex;
+    }
+
+    .stat-fill-home { background: var(--accent); height: 100%; }
+    .stat-fill-away { background: var(--gold); height: 100%; }
+
+    /* 3. رادار التحكيم والأهداف السريع */
+    .var-links-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .var-link-btn {
+      background: var(--card-inner);
+      border: 1px solid var(--border);
+      color: #FFF;
+      text-decoration: none;
+      padding: 11px 14px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: 0.2s;
+    }
+
+    .var-link-btn:active {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* شاشة التيفو الضوئي التفاعلية بالكامل */
+    .tifo-overlay {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 9999;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .tifo-overlay.active { display: flex; animation: pulseTifo 1s infinite alternate; }
+
+    .tifo-exit-btn {
+      position: absolute;
+      top: 30px;
+      background: rgba(0,0,0,0.6);
+      color: #FFF;
+      border: 1px solid #FFF;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    /* إشعار Toast */
+    .toast-box {
+      position: fixed;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1E293B;
+      border: 1px solid var(--accent);
+      color: #FFF;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: bold;
+      z-index: 5000;
+      display: none;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes pulseTifo {
+      from { background: #1D4ED8; }
+      to { background: #60A5FA; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="toast" class="toast-box"></div>
+
+  <!-- شاشة التيفو الضوئي للمدرج -->
+  <div id="tifoScreen" class="tifo-overlay">
+    <button class="tifo-exit-btn" onclick="toggleTifo(false)">✕ إنهاء وضع التيفو</button>
+    <h2 style="font-size: 2.2rem; font-weight: 900; margin-bottom: 8px; color: #FFF;">ارفع جوالك عالياً ⚡</h2>
+    <p style="font-size: 1rem; color: #E0E7FF;">متزامن مع هتافات المدرج والاحتفال بالهدف</p>
+  </div>
+
+  <div class="pass-container">
+    
+    <div class="pass-header">
+      <span class="badge-vip">المدرج الحي VIP ⭐</span>
+      <span style="font-size: 0.75rem; color: var(--muted);">المدرج الغربي - بوابات 4</span>
+    </div>
+
+    <!-- هوية المشجع -->
+    <div class="fan-profile">
+      <div class="crest-container">⚽</div>
+      <div class="fan-title">بطاقة المشجع الميدانية</div>
+      <div class="fan-subtitle">الموسم الرياضي 2026 | رادار المدرج المباشر</div>
+    </div>
+
+    <!-- حافظ موقف السيارة الذكي -->
+    <div class="car-finder-box">
+      <div class="box-title">
+        <span>🚗</span>
+        <span>موقع السيارة في مواقف الملعب</span>
+      </div>
+      <p id="carStatusText" style="font-size: 0.72rem; color: var(--muted);">لم يتم تثبيت موقع سيارتك اليوم بعد.</p>
+      <div class="car-actions">
+        <button class="btn-action btn-save-car" onclick="saveCarLocation()">📍 احفظ الموقع الآن</button>
+        <button class="btn-action btn-find-car" onclick="goToCar()">🗺️ المسار لسيارتي</button>
+      </div>
+    </div>
+
+    <!-- شبكة الأدوات التفاعلية للمدرج -->
+    <div class="tools-grid">
+      <div class="tool-card" onclick="openDrawer('heatmapsDrawer')">
+        <div class="tool-icon">🗺️</div>
+        <div class="tool-label">الخريطة الحرارية</div>
+        <div class="tool-desc">تحركات النجوم في الميدان</div>
+      </div>
+
+      <div class="tool-card" onclick="openDrawer('liveStatsDrawer')">
+        <div class="tool-icon">📊</div>
+        <div class="tool-label">إحصائيات حية</div>
+        <div class="tool-desc">استحواذ، تمرير، وافتكاك</div>
+      </div>
+
+      <div class="tool-card" onclick="openDrawer('varDrawer')">
+        <div class="tool-icon">📺</div>
+        <div class="tool-label">رادار التحكيم والأهداف</div>
+        <div class="tool-desc">إعادة لقطات الـ VAR الفورية</div>
+      </div>
+
+      <div class="tool-card" onclick="toggleTifo(true)">
+        <div class="tool-icon">💡</div>
+        <div class="tool-label">تيفو الشاشة</div>
+        <div class="tool-desc">وميض نيون حماسي متزامن</div>
+      </div>
+    </div>
+
+    <!-- 1. نافذة الخريطة الحرارية التفاعلية للنجوم -->
+    <div id="heatmapsDrawer" class="content-drawer">
+      <div class="drawer-header">
+        <h4>🗺️ الخريطة الحرارية لتحركات النجوم</h4>
+        <button class="close-btn" onclick="closeDrawer('heatmapsDrawer')">✕</button>
+      </div>
+
+      <p style="font-size: 0.72rem; color: var(--muted); margin-bottom: 8px;">اختر اللاعب لمشاهدة بقعة نشاطه الحالية في الملعب:</p>
+      
+      <div class="player-selector-bar">
+        <button class="player-chip active" onclick="setHeatmap('cam')">صانع اللعب (#10)</button>
+        <button class="player-chip" onclick="setHeatmap('winger')">الجناح الهجومي (#7)</button>
+        <button class="player-chip" onclick="setHeatmap('striker')">رأس الحربة (#9)</button>
+        <button class="player-chip" onclick="setHeatmap('pivot')">محور الارتكاز (#6)</button>
+      </div>
+
+      <!-- الملعب التكتيكي -->
+      <div class="tactical-pitch">
+        <div class="pitch-line-center"></div>
+        <div class="pitch-circle"></div>
+        <!-- بقعة الحرارة الديناميكية -->
+        <div id="heatZone" class="heat-glow" style="width: 110px; height: 110px; background: radial-gradient(circle, #EF4444 0%, #F59E0B 40%, transparent 75%); top: 55px; left: 160px;"></div>
+      </div>
+
+      <div id="playerStatsMini" style="font-size: 0.75rem; background: var(--card-inner); padding: 10px; border-radius: 10px; color: var(--text);">
+        <strong>صانع اللعب (#10):</strong> 42 لمسة، 3 تمريرات مفتاحية، تمركز متقدم خلف المهاجمين.
+      </div>
+    </div>
+
+    <!-- 2. نافذة الإحصائيات الحية اللحظية للمباراة -->
+    <div id="liveStatsDrawer" class="content-drawer">
+      <div class="drawer-header">
+        <h4>📊 مؤشرات المباراة اللحظية</h4>
+        <button class="close-btn" onclick="closeDrawer('liveStatsDrawer')">✕</button>
+      </div>
+
+      <!-- نسبة الاستحواذ -->
+      <div class="stat-row">
+        <div class="stat-meta">
+          <span style="color: var(--accent);">فريقك 58%</span>
+          <span>الاستحواذ</span>
+          <span style="color: var(--gold);">42% الخصم</span>
+        </div>
+        <div class="stat-bar-container">
+          <div class="stat-fill-home" style="width: 58%;"></div>
+          <div class="stat-fill-away" style="width: 42%;"></div>
+        </div>
+      </div>
+
+      <!-- دقة التمرير -->
+      <div class="stat-row">
+        <div class="stat-meta">
+          <span style="color: var(--accent);">86% (385 تمريرة)</span>
+          <span>دقة التمرير</span>
+          <span style="color: var(--gold);">78% (290)</span>
+        </div>
+        <div class="stat-bar-container">
+          <div class="stat-fill-home" style="width: 62%;"></div>
+          <div class="stat-fill-away" style="width: 38%;"></div>
+        </div>
+      </div>
+
+      <!-- افتكاك وقطع الكرات -->
+      <div class="stat-row">
+        <div class="stat-meta">
+          <span style="color: var(--accent);">19 قطع ناجح</span>
+          <span>افتكاك الكرات</span>
+          <span style="color: var(--gold);">12</span>
+        </div>
+        <div class="stat-bar-container">
+          <div class="stat-fill-home" style="width: 65%;"></div>
+          <div class="stat-fill-away" style="width: 35%;"></div>
+        </div>
+      </div>
+
+      <!-- التسديدات على المرمى -->
+      <div class="stat-row">
+        <div class="stat-meta">
+          <span style="color: var(--accent);">7 (4 على المرمى)</span>
+          <span>التسديدات</span>
+          <span style="color: var(--gold);">3 (1 على المرمى)</span>
+        </div>
+        <div class="stat-bar-container">
+          <div class="stat-fill-home" style="width: 70%;"></div>
+          <div class="stat-fill-away" style="width: 30%;"></div>
+        </div>
+      </div>
+
+      <a href="https://www.sofascore.com" target="_blank" class="btn-action btn-find-car" style="width: 100%; text-decoration: none; margin-top: 10px;">فتح البث التكتيكي الرقمي الموسع ➔</a>
+    </div>
+
+    <!-- 3. نافذة رادار التحكيم والأهداف المباشرة -->
+    <div id="varDrawer" class="content-drawer">
+      <div class="drawer-header">
+        <h4>📺 رادار الأهداف والجدل التحكيمي (VAR)</h4>
+        <button class="close-btn" onclick="closeDrawer('varDrawer')">✕</button>
+      </div>
+
+      <p style="font-size: 0.74rem; color: var(--muted); margin-bottom: 12px;">شاهد لقطات الإعادة البطيئة والقرارات التحكيمية المثيرة للجدل في نفس ثانية حدوثها وأنت في مقعدك:</p>
+
+      <div class="var-links-grid">
+        <a href="https://twitter.com/search?q=%D8%A7%D9%84%D8%AF%D9%8A%D8%B1%D8%A8%D9%8A%20%D9%87%D8%AF%D9%81&f=live" target="_blank" class="var-link-btn">
+          <span>⚽ لقطات الأهداف اللحظية (تحديث مباشر)</span>
+          <span>➔</span>
+        </a>
+
+        <a href="https://twitter.com/search?q=%D8%A7%D9%84%D8%AA%D8%AD%D9%83%D9%8A%D9%85%20%D8%A8%D9%84%D9%86%D8%AA%D9%8A%20%D8%AD%D8%A7%D9%84%D8%A9&f=live" target="_blank" class="var-link-btn">
+          <span>🚨 مراجعة حالات الـ VAR والبلنتيات</span>
+          <span>➔</span>
+        </a>
+
+        <a href="https://t.me" target="_blank" class="var-link-btn">
+          <span>🎥 قناة توثيق مقاطع المباراة بجودة عالية (Telegram)</span>
+          <span>➔</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // التحكم بالخريطة الحرارية التفاعلية
+    const heatData = {
+      cam: { top: '55px', left: '160px', width: '110px', height: '110px', desc: '<strong>صانع اللعب (#10):</strong> 42 لمسة، 3 تمريرات مفتاحية، تمركز متقدم خلف المهاجمين.' },
+      winger: { top: '15px', left: '230px', width: '130px', height: '80px', desc: '<strong>الجناح الهجومي (#7):</strong> نشاط مكثف على الرواق الأيمن، 6 مراوغات ناجحة و3 عرضيات.' },
+      striker: { top: '70px', left: '260px', width: '90px', height: '90px', desc: '<strong>رأس الحربة (#9):</strong> تمركز دائم داخل صندوق الجزاء، تسديدتان على المرمى، وهدف محقق.' },
+      pivot: { top: '65px', left: '90px', width: '120px', height: '100px', desc: '<strong>محور الارتكاز (#6):</strong> تغطية دائرة المنتصف، 7 استرجاعات للكرة، ومعدل قطع 85%.' }
+    };
+
+    function setHeatmap(role) {
+      document.querySelectorAll('.player-chip').forEach(c => c.classList.remove('active'));
+      event.target.classList.add('active');
+
+      const zone = document.getElementById('heatZone');
+      const info = document.getElementById('playerStatsMini');
+      const data = heatData[role];
+
+      zone.style.top = data.top;
+      zone.style.left = data.left;
+      zone.style.width = data.width;
+      zone.style.height = data.height;
+      info.innerHTML = data.desc;
+    }
+
+    // حفظ واسترجاع موقع السيارة عبر GPS
+    function saveCarLocation() {
+      if (!navigator.geolocation) {
+        showToast("خاصية تحديد الموقع غير مدعومة بجهازك");
+        return;
+      }
+      showToast("جاري التقاط إحداثيات موقع السيارة بدقة...");
+      navigator.geolocation.getCurrentPosition((pos) => {
+        const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude, time: new Date().toLocaleTimeString('ar-SA') };
+        localStorage.setItem('fan_car_loc', JSON.stringify(coords));
+        updateCarUI();
+        showToast("✓ تم حفظ موقع السيارة في مواقف الملعب بنجاح!");
+      }, () => {
+        showToast("يرجى تفعيل صلاحية الـ GPS في متصفحك");
+      }, { enableHighAccuracy: true });
+    }
+
+    function updateCarUI() {
+      const saved = localStorage.getItem('fan_car_loc');
+      const text = document.getElementById('carStatusText');
+      if (saved) {
+        const data = JSON.parse(saved);
+        text.innerHTML = `<span style="color:#10B981;">✓ مثبت بنجاح</span> (الساعة ${data.time})`;
+      }
+    }
+
+    function goToCar() {
+      const saved = localStorage.getItem('fan_car_loc');
+      if (!saved) {
+        showToast("لم تقم بحفظ موقع السيارة بعد!");
+        return;
+      }
+      const data = JSON.parse(saved);
+      window.open(`https://www.google.com/maps/dir/?api=1&destination=${data.lat},${data.lng}`, '_blank');
+    }
+
+    // شاشة التيفو
+    function toggleTifo(show) {
+      const screen = document.getElementById('tifoScreen');
+      screen.classList.toggle('active', show);
+      if (show && navigator.vibrate) {
+        navigator.vibrate([200, 100, 200, 100]);
+      }
+    }
+
+    // فتح وإغلاق النوافذ
+    function openDrawer(id) {
+      document.querySelectorAll('.content-drawer').forEach(d => d.style.display = 'none');
+      document.getElementById(id).style.display = 'block';
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function closeDrawer(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.innerText = msg;
+      t.style.display = 'block';
+      setTimeout(() => { t.style.display = 'none'; }, 3000);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      updateCarUI();
+    });
+  </script>
+</body>
+</html>
